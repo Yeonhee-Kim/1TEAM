@@ -10,24 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Repository Checkout
+      # 1. Repository 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Log in to Amazon ECR
+      # 2. Java 빌드
+      - name: Build JAR with Gradle
+        run: |
+          cd backend
+          ./gradlew bootJar
+
+      # 3. Log in to Amazon ECR
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
 
-      # 3. Build and Push Docker Image
-      - name: Build, tag, and push Docker image
+      # 4. Build and Push Docker Image
+      - name: Build and Push Docker Image
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_BACKEND }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
           docker build -t $ECR_REPOSITORY:${{ github.sha }} ./backend
           docker tag $ECR_REPOSITORY:${{ github.sha }} $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
