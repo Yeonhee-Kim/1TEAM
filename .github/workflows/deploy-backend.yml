@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - develop
-
+    paths:
+      - "backend/**" # 'backend/' 디렉토리 내부 파일이 변경될 때만 실행
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

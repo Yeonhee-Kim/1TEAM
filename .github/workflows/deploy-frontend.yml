@@ -3,8 +3,9 @@ name: Deploy Frontend to ECS
 on:
   push:
     branches:
-      - main
       - develop
+    paths:
+      - "frontend/**" # 'frontend/' 디렉토리 내부 파일이 변경될 때만 실행
 
 jobs:
   build-and-deploy:
