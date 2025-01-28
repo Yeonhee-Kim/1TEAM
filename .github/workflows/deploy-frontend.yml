@@ -42,7 +42,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
-          task-definition: test-cicd-frontend-yeonhee:1
+          task-definition: .github/test-cicd-frontend-yeonhee-revision.json
           service: frontend-service
           cluster: cicd-yeonhee
           wait-for-service-stability: true
